@@ -1,0 +1,15 @@
+# Secrets — never commit these
+.env
+profiles.yml
+*.json  # service account keys
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+logs/
