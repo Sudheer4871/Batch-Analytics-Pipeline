@@ -1,17 +1,25 @@
 # Batch Analytics Pipeline
 
-End-to-end data pipeline ingesting [data source] data,
-transforming with dbt and loading into Snowflake for analytics.
+End-to-end batch data pipeline that ingests daily weather data from the
+Open-Meteo API, transforms it with dbt, and loads it into Snowflake
+for analytics.
+
 
 ## Architecture
 
-
+Open-Meteo API  →  Python Ingestion  →  Snowflake RAW
+                                              │
+                                    dbt staging (views)
+                                              │
+                                    dbt marts (tables)
+                                              │
+                                  Analytics / Dashboards
 ## Tech Stack
-- **Ingestion:** Python, Requests
-- **Transformation:** dbt (staging → marts pattern)
-- **Warehouse:** Snowflake
-- **Orchestration:** Apache Airflow (planned)
-- **Data Quality:** dbt tests + custom checks
+LayerToolIngestionPython 3.11, Requests, Pandas
+WarehouseS nowflake
+Transformation dbt (staging → marts pattern)
+Data Quality dbt schema tests + custom Python tests
+OrchestrationApache Airflow (planned)
 
 ## Pipeline Flow
 Raw API → Python ingestion → Snowflake raw schema
