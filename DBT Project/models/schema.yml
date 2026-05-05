@@ -1,0 +1,36 @@
+
+Copy
+
+version: 2
+ 
+sources:
+  - name: raw
+    database: ANALYTICS
+    schema: RAW
+    tables:
+      - name: weather_daily
+        columns:
+          - name: city
+            tests:
+              - not_null
+          - name: date
+            tests:
+              - not_null
+ 
+models:
+  - name: stg_weather_daily
+    description: "Cleaned daily weather readings from Open-Meteo, one row per city per day"
+    columns:
+      - name: city
+        tests:
+          - not_null
+      - name: weather_date
+        tests:
+          - not_null
+      - name: temp_max_c
+        tests:
+          - not_null
+      - name: temp_min_c
+        tests:
+          - not_null
+ 
