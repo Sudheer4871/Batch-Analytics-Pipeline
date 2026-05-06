@@ -1,33 +1,99 @@
 version: 2
- 
-sources:
-  - name: raw
-    database: ANALYTICS
-    schema: RAW
-    tables:
-      - name: weather_daily
-        columns:
-          - name: city
-            tests:
-              - not_null
-          - name: date
-            tests:
-              - not_null
- 
+
 models:
-  - name: stg_weather_daily
-    description: "Cleaned daily weather readings from Open-Meteo, one row per city per day"
+  - name: stg_meteo__hourly
+    description: "Cleaned and typed hourly weather observations from Open-Meteo API"
     columns:
-      - name: city
-        tests:
+      - name: observed_at
+        description: "UTC timestamp of the observation"
+        data_tests:
           - not_null
-      - name: weather_date
-        tests:
+      - name: observed_date
+        description: "Date of the observation"
+        data_tests:
           - not_null
-      - name: temp_max_c
-        tests:
+      - name: latitude
+        description: "Latitude of the location"
+        data_tests:
           - not_null
-      - name: temp_min_c
-        tests:
+      - name: longitude
+        description: "Longitude of the location"
+        data_tests:
           - not_null
- 
+      - name: temperature_c
+        description: "Air temperature in Celsius"
+        data_tests:
+          - not_null
+      - name: relative_humidity_pct
+        description: "Relative humidity percentage"
+        data_tests:
+          - not_null
+      - name: precipitation_mm
+        description: "Hourly precipitation in mm"
+        data_tests:
+          - not_null
+      - name: wind_speed_kmh
+        description: "Wind speed in km/h"
+        data_tests:
+          - not_null
+      - name: weather_description
+        description: "Human-readable weather condition"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'Clear Sky'
+                - 'Partly Cloudy'
+                - 'Foggy'
+                - 'Drizzle'
+                - 'Rain'
+                - 'Snow'
+                - 'Rain Showers'
+                - 'Thunderstorm'
+                - 'Unknown'
+
+  - name: mart_weather__daily_summary
+    description: "Daily aggregated weather metrics per location. Grain: one row per date + lat/lon."
+    columns:
+      - name: observed_date
+        description: "The date of the summary"
+        data_tests:
+          - not_null
+      - name: latitude
+        description: "Latitude of the location"
+        data_tests:
+          - not_null
+      - name: longitude
+        description: "Longitude of the location"
+        data_tests:
+          - not_null
+      - name: total_precipitation_mm
+        description: "Total precipitation across all hours of the day"
+        data_tests:
+          - not_null
+      - name: hours_recorded
+        description: "Number of hourly records for the day (max 24)"
+        data_tests:
+          - not_null
+      - name: precipitation_category
+        description: "Day-level precipitation label"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'Dry'
+                - 'Light Rain'
+                - 'Moderate Rain'
+                - 'Heavy Rain'
+      - name: temperature_category
+        description: "Day-level temperature label"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'Extreme Heat'
+                - 'Hot'
+                - 'Warm'
+                - 'Mild'
+                - 'Cold'
+                - 'Freezing'
