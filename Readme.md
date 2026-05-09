@@ -31,7 +31,9 @@ Raw API → Python ingestion → Snowflake raw schema
 - Row count validation between layers
 
 ## Setup
-[instructions to run locally]
+pip install -r requirements.txt
+python ingestion/ingest.py
+dbt run
 
 ## Status
 In Progress
